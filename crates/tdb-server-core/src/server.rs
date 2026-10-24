@@ -37,6 +37,14 @@ pub async fn run_server(host: &str, port: &str, settings: Arc<Settings>) -> Resu
     let addr: SocketAddr = addr.parse().expect("Invalid host or port provided!");
 
     info!("Trying to bind to addr: {}", addr);
+    let listener = TcpListener::bind(addr).await?;
+    run_server_with_listener(listener, settings).await
+}
+
+pub async fn run_server_with_listener(
+    listener: TcpListener,
+    settings: Arc<Settings>,
+) -> Result<()> {
     if !settings.autoflush {
         warn!("Autoflush is off!");
     }
@@ -46,8 +54,6 @@ pub async fn run_server(host: &str, port: &str, settings: Arc<Settings>) -> Resu
         settings.flush_interval
     );
     info!("History granularity: {}.", settings.granularity);
-
-    let listener = TcpListener::bind(addr).await?;
 
     let (broker_sender, broker_receiver) = mpsc::channel::<Event>(CHANNEL_SZ);
 
