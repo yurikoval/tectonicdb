@@ -26,7 +26,7 @@ bench = false
 path = "bins/tdb/main.rs"
 
 [dependencies]
-tdb_server_core = { path = "crates/tdb-server-core", version = "0.5.0", features = ["influx"] }
+tdb_server_core = { path = "crates/tdb-server-core", version = "0.5.0", default-features = false }
 tdb_core = { path = "crates/tdb-core", version = "0.5.0" }
 tdb_cli = { path = "crates/tdb-cli", version = "0.5.0" }
 log = "0.4.14"
@@ -60,4 +60,4 @@ path = "tests/integration_test.rs"
 [features]
 
 default = ["influx"]
-influx = []
+influx = ["tdb_server_core/influx"]
